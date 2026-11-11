@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MK // DEV CORE — Shaikh Muzakkir Kaleem Ahmed</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            background-image: radial-gradient(rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+        .pro-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .pro-card:hover {
+            box-shadow: 0 20px 40px -4px rgba(79, 70, 229, 0.12);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-3px);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 20px -5px rgba(6, 182, 212, 0.35);
+        }
+        .glow-indigo {
+            box-shadow: 0 0 20px -5px rgba(99, 102, 241, 0.35);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .pulse-dot {
+            animation: pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-indigo-600 selection:text-white pb-20 sm:pb-0">
+
+    <!-- Top Pro-Dev Navigation -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- Left Brand Identity -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-mono font-bold text-sm shadow-md glow-indigo">
+                    <span class="text-indigo-400">MK</span>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2 font-mono">
+                        <span>MK</span>
+                        <span class="text-indigo-600 font-normal">//</span>
+                        <span class="text-slate-500 font-semibold text-xs hidden sm:inline uppercase tracking-widest">DEV CORE</span>
+                    </h1>
+                    <p class="text-[11px] text-slate-500 font-mono flex items-center gap-1.5">
+                        <span id="sync-status-dot" class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
+                        <span id="sync-status-text">SYSTEM ONLINE</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Controls & Search trigger -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Command Palette Trigger -->
+                <button id="cmd-palette-btn" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200 transition">
+                    <i class="fa-solid fa-terminal text-indigo-600 text-xs"></i>
+                    <span>Cmd Palette</span>
+                    <kbd class="px-1.5 py-0.5 rounded bg-white text-[10px] text-slate-400 border border-slate-200 font-semibold">⌘K</kbd>
+                </button>
+
+                <!-- Export JSON Button -->
+                <button id="export-json-btn" class="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition hidden md:flex items-center gap-1.5 border border-slate-200">
+                    <i class="fa-solid fa-download text-indigo-600"></i> Export
+                </button>
+
+                <!-- Developer Mode Auth Toggle -->
+                <button id="admin-mode-btn" class="px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-slate-900 hover:bg-slate-800 text-white transition flex items-center gap-2 shadow-sm active:scale-95">
+                    <i class="fa-solid fa-shield-halved text-indigo-400" id="admin-lock-icon"></i>
+                    <span id="admin-mode-text">ROOT LOGIN</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Developer Root Active Bar -->
+    <div id="admin-banner" class="hidden bg-slate-900 text-white py-2.5 px-4 border-b border-indigo-900/40 shadow-inner">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+            <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold uppercase text-[10px]">ROOT PRIVILEGES UNLOCKED</span>
+                <span class="text-slate-400 hidden sm:inline">You have read/write/re-order access across all database payloads.</span>
+            </div>
+            <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                <button id="admin-add-project-btn" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-plus"></i> New Payload
+                </button>
+                <button id="import-trigger-btn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-import"></i> Import JSON
+                </button>
+                <input type="file" id="import-json-input" accept=".json" class="hidden">
+                <button id="admin-logout-btn" class="px-3 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 transition border border-rose-500/30">
+                    Exit Root
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- Terminal Diagnostic Stats Bar -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Total Projects</p>
+                    <h4 id="stat-total" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5 font-mono">0</h4>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-mono">
+                    <i class="fa-solid fa-cubes text-sm"></i>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Live Apps</p>
+                    <h4 id="stat-live" class="text-xl sm:text-2xl font-extrabold text-emerald-600 mt-0.5 font-mono">0</h4>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-mono">
+                    <i class="fa-solid fa-globe text-sm"></i>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Categories</p>
+                    <h4 id="stat-categories" class="text-xl sm:text-2xl font-extrabold text-violet-600 mt-0.5 font-mono">0</h4>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center font-mono">
+                    <i class="fa-solid fa-layer-group text-sm"></i>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Database Node</p>
+                    <h4 id="stat-engine" class="text-xs font-bold text-slate-800 font-mono truncate mt-1">Connecting...</h4>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-mono">
+                    <i class="fa-solid fa-server text-sm"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm mb-6 space-y-4">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                
+                <!-- Search Box -->
+                <div class="relative flex-grow">
+                    <i class="fa-solid fa-code-compare absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="search-input" placeholder="Search payloads by title, stack, description, category..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+                </div>
+
+                <!-- Dual View Switcher -->
+                <div class="flex items-center justify-end bg-slate-100 p-1 rounded-xl border border-slate-200 self-end sm:self-auto">
+                    <button id="view-grid-btn" class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition flex items-center gap-1.5 bg-white text-indigo-600 shadow-sm">
+                        <i class="fa-solid fa-grip-vertical"></i> Grid
+                    </button>
+                    <button id="view-list-btn" class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900">
+                        <i class="fa-solid fa-table-list"></i> Table
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-mono no-scrollbar" id="category-pills-container">
+                <!-- Dynamic Pills Inserted Here -->
+            </div>
+        </div>
+
+        <!-- Sequence Counter Header -->
+        <div class="flex items-center justify-between mb-4 px-1 text-xs font-mono text-slate-500">
+            <div id="stats-counter" class="font-medium text-slate-600">Syncing payloads...</div>
+            <div class="flex items-center gap-1.5 text-indigo-600 font-semibold">
+                <i class="fa-solid fa-arrow-down-short-wide"></i>
+                <span>Sequential Order</span>
+            </div>
+        </div>
+
+        <!-- Main Dynamic Output Container -->
+        <div id="projects-container" class="transition-all duration-200">
+            <!-- Dynamic Project Cards or Table Rows -->
+        </div>
+
+        <!-- Empty Results View -->
+        <div id="empty-state" class="hidden bg-white rounded-2xl p-10 text-center max-w-md mx-auto my-12 border border-slate-200 shadow-sm">
+            <div class="w-16 h-16 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 border border-indigo-100 font-mono">
+                &lt;404&gt;
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">No Projects Found</h3>
+            <p class="text-xs text-slate-500 mb-6 font-mono">No database records matched your search filter criteria.</p>
+            <button id="reset-filters-btn" class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-sm font-mono">
+                Reset Search Filters
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Mobile Bottom Dock Navigation -->
+    <div class="fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur-md border-t border-slate-200 sm:hidden px-6 py-2 flex items-center justify-around text-slate-600">
+        <button id="mobile-home-btn" class="flex flex-col items-center gap-1 text-indigo-600 font-mono text-[10px]">
+            <i class="fa-solid fa-cubes text-base"></i>
+            <span>Hub</span>
+        </button>
+        <button id="mobile-cmd-btn" class="flex flex-col items-center gap-1 text-slate-500 font-mono text-[10px]">
+            <i class="fa-solid fa-terminal text-base"></i>
+            <span>Cmd</span>
+        </button>
+        <button id="mobile-root-btn" class="flex flex-col items-center gap-1 text-slate-500 font-mono text-[10px]">
+            <i class="fa-solid fa-shield-halved text-base"></i>
+            <span>Root</span>
+        </button>
+    </div>
+
+    <!-- Floating Action Button for Mobile Admin Add -->
+    <button id="mobile-add-fab" class="hidden fixed bottom-16 right-5 z-40 w-14 h-14 rounded-full bg-indigo-600 text-white text-xl shadow-xl flex items-center justify-center hover:bg-indigo-700 active:scale-95 transition glow-indigo">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-500">
+            <div class="flex items-center space-x-2">
+                <span class="font-bold text-slate-800">MK // DEV CORE</span>
+                <span>&bull;</span>
+                <span>Shaikh Muzakkir Kaleem Ahmed</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span id="footer-sync-mode">Firebase Realtime Sync</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- COMMAND PALETTE MODAL -->
+    <div id="cmd-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-start justify-center pt-16 px-4">
+        <div class="bg-white w-full max-w-lg rounded-2xl border border-slate-200 overflow-hidden shadow-2xl">
+            <div class="p-3 border-b border-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-terminal text-indigo-600 pl-2"></i>
+                <input type="text" id="cmd-input" placeholder="Type a developer command (e.g. 'export', 'add', 'root', 'reset')..." class="w-full bg-transparent border-0 text-slate-900 placeholder-slate-400 font-mono text-xs focus:ring-0 focus:outline-none">
+                <span class="text-[10px] font-mono text-slate-400 px-2 py-1 bg-slate-100 rounded">ESC</span>
+            </div>
+            <div class="p-2 max-h-60 overflow-y-auto font-mono text-xs space-y-1" id="cmd-results">
+                <div onclick="window.triggerCmd('add')" class="p-2 rounded-lg hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 cursor-pointer flex items-center justify-between">
+                    <span><i class="fa-solid fa-plus mr-2 text-indigo-500"></i> add: Create new project payload</span>
+                    <span class="text-[10px] text-slate-400">Root</span>
+                </div>
+                <div onclick="window.triggerCmd('root')" class="p-2 rounded-lg hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 cursor-pointer flex items-center justify-between">
+                    <span><i class="fa-solid fa-key mr-2 text-amber-500"></i> root: Toggle admin authentication</span>
+                    <span class="text-[10px] text-slate-400">Auth</span>
+                </div>
+                <div onclick="window.triggerCmd('export')" class="p-2 rounded-lg hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 cursor-pointer flex items-center justify-between">
+                    <span><i class="fa-solid fa-download mr-2 text-emerald-500"></i> export: Download backup JSON payload</span>
+                    <span class="text-[10px] text-slate-400">Data</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN AUTH MODAL -->
+    <div id="admin-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl border border-slate-200 p-6 shadow-2xl relative font-mono">
+            <h3 class="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-indigo-600"></i> Root Authentication
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">Enter system passcode to grant read/write administrative root status.</p>
+            <form id="admin-login-form" class="space-y-4">
+                <div>
+                    <input type="password" id="admin-password-input" required placeholder="Passcode (Default: admin123)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                </div>
+                <div id="admin-error-msg" class="text-xs text-rose-600 hidden font-mono">Invalid root authentication passcode.</div>
+                <div class="flex items-center justify-end space-x-2 pt-2">
+                    <button type="button" id="close-admin-modal-btn" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition">
+                        Authenticate Root
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CUSTOM DELETE CONFIRMATION MODAL -->
+    <div id="delete-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl border border-slate-200 p-6 shadow-2xl relative font-mono">
+            <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-xl mb-3 border border-rose-100">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">Confirm Payload Deletion</h3>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Are you sure you want to remove <span id="delete-project-title" class="font-bold text-slate-800"></span> from database node?</p>
+            <div class="flex items-center justify-end space-x-2">
+                <button type="button" id="cancel-delete-btn" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100">
+                    Cancel
+                </button>
+                <button type="button" id="confirm-delete-btn" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition">
+                    Delete Payload
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJECT ADD / EDIT MODAL -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-2xl border border-slate-200 p-6 shadow-2xl relative my-8 font-mono">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                <h3 id="modal-title" class="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-code text-indigo-600"></i>
+                    <span>Payload Configuration</span>
+                </h3>
+                <button id="close-project-modal-btn" class="text-slate-400 hover:text-slate-700 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="project-form" class="space-y-4">
+                <input type="hidden" id="form-project-id">
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="sm:col-span-2">
+                        <label for="form-title" class="block text-xs font-semibold text-slate-700 mb-1">Project Title *</label>
+                        <input type="text" id="form-title" required placeholder="e.g. 3D Virtual Chem Lab" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-sans">
+                    </div>
+                    <div>
+                        <label for="form-sequence" class="block text-xs font-semibold text-slate-700 mb-1">Sequence # *</label>
+                        <input type="number" id="form-sequence" min="1" required placeholder="1" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="form-description" class="block text-xs font-semibold text-slate-700 mb-1">Description Payload *</label>
+                    <textarea id="form-description" rows="3" required placeholder="Overview of architectural specs and features..." class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 resize-none font-sans"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="form-demo-url" class="block text-xs font-semibold text-slate-700 mb-1"><i class="fa-solid fa-globe text-indigo-600 mr-1"></i> Live Launch Link *</label>
+                        <input type="url" id="form-demo-url" required placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="form-github-url" class="block text-xs font-semibold text-slate-700 mb-1"><i class="fa-brands fa-github text-slate-600 mr-1"></i> Repository URL</label>
+                        <input type="url" id="form-github-url" placeholder="https://github.com/..." class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label for="form-category" class="block text-xs font-semibold text-slate-700 mb-1">Category *</label>
+                        <select id="form-category" required class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                            <option value="3D/WebGL">3D / WebGL</option>
+                            <option value="PWA/Mobile">PWA / Mobile</option>
+                            <option value="Web App">Web App</option>
+                            <option value="AI/Tooling">AI / Tooling</option>
+                            <option value="Chemical Sim">Chemical Sim</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="form-status" class="block text-xs font-semibold text-slate-700 mb-1">Status Badge</label>
+                        <select id="form-status" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                            <option value="Live">Live</option>
+                            <option value="Beta">Beta</option>
+                            <option value="Dev">Dev</option>
+                            <option value="Archived">Archived</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="form-icon" class="block text-xs font-semibold text-slate-700 mb-1">FontAwesome Icon</label>
+                        <input type="text" id="form-icon" placeholder="fa-solid fa-flask" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="form-tags" class="block text-xs font-semibold text-slate-700 mb-1">Tech Stack Tags (Comma Separated)</label>
+                    <input type="text" id="form-tags" placeholder="Three.js, WebGL, Tailwind, Firebase" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-sans">
+                </div>
+
+                <div class="flex items-center justify-end space-x-2 pt-4 border-t border-slate-100">
+                    <button type="button" id="cancel-project-modal-btn" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition">
+                        Save Payload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- FIREBASE & NEXUS CONTROLLER -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getDatabase, 
+            ref, 
+            onValue, 
+            set, 
+            push, 
+            remove, 
+            update 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5SjEU2tEH85gKrXrX79yAu1cCeZugOi4",
+            authDomain: "mkspam-c824d.firebaseapp.com",
+            databaseURL: "https://mkspam-c824d-default-rtdb.firebaseio.com",
+            projectId: "mkspam-c824d",
+            storageBucket: "mkspam-c824d.appspot.com",
+            messagingSenderId: "640689755066",
+            appId: "1:640689755066:web:9ad4b790ba104667e70383"
+        };
+
+        // Preloaded Developer Seed Payload
+        const SEED_PROJECTS = [
+            {
+                id: 'seed-1',
+                title: 'Virtual Chemistry Lab',
+                description: 'Interactive 3D WebGL laboratory simulator engineered for chemical reaction visualization, stoichiometry kinetics, and interactive titration.',
+                demoUrl: 'https://muzakkir.dev/chem-lab',
+                githubUrl: 'https://github.com/muzakkir/virtual-chem-lab',
+                category: 'Chemical Sim',
+                status: 'Live',
+                tags: ['Three.js', 'WebGL', 'Physics Engine'],
+                icon: 'fa-solid fa-flask-vial',
+                sequence: 1
+            },
+            {
+                id: 'seed-2',
+                title: '3D Solar System Simulation',
+                description: 'Astronomical space renderer simulating scaled orbital physics, real-time light refraction shaders, and planetarium controls.',
+                demoUrl: 'https://muzakkir.dev/solar-system',
+                githubUrl: 'https://github.com/muzakkir/3d-solar-system',
+                category: '3D/WebGL',
+                status: 'Live',
+                tags: ['Three.js', 'GLSL Shaders', 'WebGL'],
+                icon: 'fa-solid fa-globe',
+                sequence: 2
+            },
+            {
+                id: 'seed-3',
+                title: 'MK Memories PWA',
+                description: 'Progressive Web Application designed for offline spatial memory logs, encrypted local media persistence, and timeline view.',
+                demoUrl: 'https://muzakkir.dev/mk-memories',
+                githubUrl: 'https://github.com/muzakkir/mk-memories-pwa',
+                category: 'PWA/Mobile',
+                status: 'Live',
+                tags: ['PWA', 'IndexedDB', 'Tailwind'],
+                icon: 'fa-solid fa-photo-film',
+                sequence: 3
+            },
+            {
+                id: 'seed-4',
+                title: 'Zintick AI Hub',
+                description: 'Productivity command suite integrating wearable sensor analytics, task sequence algorithms, and continuous AI state sync.',
+                demoUrl: 'https://muzakkir.dev/zintick',
+                githubUrl: 'https://github.com/muzakkir/zintick-hub',
+                category: 'AI/Tooling',
+                status: 'Beta',
+                tags: ['Tailwind', 'Firebase', 'AI Suite'],
+                icon: 'fa-solid fa-microchip',
+                sequence: 4
+            }
+        ];
+
+        // System State
+        let projects = [];
+        let activeCategory = 'All';
+        let searchQuery = '';
+        let viewMode = 'grid';
+        let isAdminLoggedIn = false;
+        let isFirebaseAvailable = false;
+        let pendingDeleteId = null;
+
+        let db = null;
+        let projectsRef = null;
+
+        const ADMIN_PASSCODE = 'admin123';
+        const LOCAL_STORAGE_KEY = 'mk_dev_core_projects_v3';
+
+        // Window Init
+        window.addEventListener('DOMContentLoaded', () => {
+            initNexusApp();
+            setupGlobalListeners();
+        });
+
+        function initNexusApp() {
+            const statusDot = document.getElementById('sync-status-dot');
+            const statusText = document.getElementById('sync-status-text');
+            const statEngine = document.getElementById('stat-engine');
+
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getDatabase(app);
+                projectsRef = ref(db, 'projects');
+
+                let dataReceived = false;
+
+                onValue(projectsRef, (snapshot) => {
+                    dataReceived = true;
+                    isFirebaseAvailable = true;
+                    statusDot.className = 'w-2 h-2 rounded-full bg-emerald-500 pulse-dot';
+                    statusText.textContent = 'SYSTEM ONLINE';
+                    statEngine.textContent = 'Firebase RTDB';
+
+                    const data = snapshot.val();
+                    if (data) {
+                        projects = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        }));
+                    } else {
+                        seedDatabase();
+                        return;
+                    }
+
+                    sortProjects();
+                    updateMetrics();
+                    renderCategories();
+                    renderProjects();
+                }, (err) => {
+                    console.warn("Firebase snapshot error fallback to LocalStorage:", err);
+                    triggerLocalFallback(statusDot, statusText, statEngine);
+                });
+
+                setTimeout(() => {
+                    if (!dataReceived && !isFirebaseAvailable) {
+                        triggerLocalFallback(statusDot, statusText, statEngine);
+                    }
+                }, 3500);
+
+            } catch (err) {
+                console.warn("Firebase init failed:", err);
+                triggerLocalFallback(statusDot, statusText, statEngine);
+            }
+        }
+
+        function triggerLocalFallback(dot, text, engine) {
+            isFirebaseAvailable = false;
+            dot.className = 'w-2 h-2 rounded-full bg-indigo-500';
+            text.textContent = 'OFFLINE CACHE';
+            engine.textContent = 'LocalStorage Node';
+
+            const local = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (local) {
+                try {
+                    projects = JSON.parse(local);
+                } catch (e) {
+                    projects = [...SEED_PROJECTS];
+                    persistLocalState();
+                }
+            } else {
+                projects = [...SEED_PROJECTS];
+                persistLocalState();
+            }
+
+            sortProjects();
+            updateMetrics();
+            renderCategories();
+            renderProjects();
+        }
+
+        function persistLocalState() {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(projects));
+        }
+
+        function seedDatabase() {
+            SEED_PROJECTS.forEach(item => {
+                const newRef = push(projectsRef);
+                const { id, ...itemData } = item;
+                set(newRef, itemData);
+            });
+        }
+
+        function sortProjects() {
+            projects.sort((a, b) => (Number(a.sequence) || 0) - (Number(b.sequence) || 0));
+        }
+
+        function updateMetrics() {
+            document.getElementById('stat-total').textContent = projects.length;
+            document.getElementById('stat-live').textContent = projects.filter(p => (p.status || 'Live') === 'Live').length;
+            const cats = new Set(projects.map(p => p.category));
+            document.getElementById('stat-categories').textContent = cats.size;
+        }
+
+        function getFilteredProjects() {
+            let filtered = [...projects];
+
+            if (searchQuery.trim() !== '') {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(p => 
+                    p.title.toLowerCase().includes(q) ||
+                    p.description.toLowerCase().includes(q) ||
+                    p.category.toLowerCase().includes(q) ||
+                    (p.tags && p.tags.some(t => t.toLowerCase().includes(q)))
+                );
+            }
+
+            if (activeCategory !== 'All') {
+                filtered = filtered.filter(p => p.category === activeCategory);
+            }
+
+            filtered.sort((a, b) => (Number(a.sequence) || 0) - (Number(b.sequence) || 0));
+            return filtered;
+        }
+
+        function renderCategories() {
+            const categories = ['All', ...new Set(projects.map(p => p.category))];
+            const container = document.getElementById('category-pills-container');
+            container.innerHTML = '';
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                const isActive = cat === activeCategory;
+                btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition flex items-center gap-1.5 whitespace-nowrap ${
+                    isActive 
+                    ? 'bg-indigo-600 text-white shadow-sm' 
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300'
+                }`;
+
+                btn.innerHTML = `<span>${cat}</span>`;
+                btn.addEventListener('click', () => {
+                    activeCategory = cat;
+                    renderCategories();
+                    renderProjects();
+                });
+                container.appendChild(btn);
+            });
+        }
+
+        function renderProjects() {
+            const list = getFilteredProjects();
+            const container = document.getElementById('projects-container');
+            const emptyState = document.getElementById('empty-state');
+            const counter = document.getElementById('stats-counter');
+
+            counter.textContent = `Rendering ${list.length} of ${projects.length} database nodes`;
+
+            if (list.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            if (viewMode === 'grid') {
+                container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5";
+                container.innerHTML = list.map(p => renderGridCard(p)).join('');
+            } else {
+                container.className = "space-y-3";
+                container.innerHTML = list.map(p => renderListItem(p)).join('');
+            }
+        }
+
+        function getStatusBadge(status = 'Live') {
+            const map = {
+                'Live': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                'Beta': 'bg-violet-50 text-violet-700 border-violet-200',
+                'Dev': 'bg-cyan-50 text-cyan-700 border-cyan-200',
+                'Archived': 'bg-slate-100 text-slate-600 border-slate-200'
+            };
+            return `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${map[status] || map['Live']}">${status}</span>`;
+        }
+
+        function renderGridCard(p) {
+            const iconClass = p.icon || 'fa-solid fa-code';
+            const tagsHtml = (p.tags || []).map(t => `<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-mono border border-slate-200 font-medium">${t}</span>`).join('');
+
+            const adminControls = isAdminLoggedIn ? `
+                <div class="flex items-center space-x-1">
+                    <button onclick="window.moveSequence('${p.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-indigo-600 text-xs transition" title="Shift Up">
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </button>
+                    <button onclick="window.moveSequence('${p.id}', 1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-indigo-600 text-xs transition" title="Shift Down">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <button onclick="window.editProject('${p.id}')" class="w-7 h-7 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs transition border border-amber-200 ml-1" title="Edit Payload">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button onclick="window.confirmDeleteProject('${p.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs transition border border-rose-200" title="Delete Payload">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            ` : '';
+
+            return `
+                <div class="pro-card rounded-2xl p-5 flex flex-col justify-between group">
+                    <div>
+                        <!-- Header Sequence -->
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-7 h-7 rounded-lg bg-slate-900 text-white font-mono text-xs font-bold flex items-center justify-center">
+                                    #${p.sequence || 0}
+                                </span>
+                                ${getStatusBadge(p.status)}
+                                <span class="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                                    ${p.category}
+                                </span>
+                            </div>
+                            ${adminControls}
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="flex items-start gap-3 my-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 text-indigo-600 flex items-center justify-center text-lg flex-shrink-0 border border-slate-200 group-hover:bg-indigo-600 group-hover:text-white transition">
+                                <i class="${iconClass}"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition line-clamp-1 font-sans">${p.title}</h3>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    ${tagsHtml}
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-600 text-xs leading-relaxed line-clamp-3 font-sans">
+                            ${p.description}
+                        </p>
+                    </div>
+
+                    <!-- Card Footer Actions -->
+                    <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
+                        <div class="flex items-center space-x-2">
+                            <a href="${p.demoUrl}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition flex items-center gap-1.5 shadow-sm">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Launch
+                            </a>
+                            ${p.githubUrl ? `
+                            <a href="${p.githubUrl}" target="_blank" rel="noopener noreferrer" class="p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition" title="Source Code">
+                                <i class="fa-brands fa-github text-base"></i>
+                            </a>` : ''}
+                        </div>
+                        <button onclick="window.copyLink('${p.demoUrl}')" class="p-1.5 text-slate-400 hover:text-indigo-600 transition" title="Copy URL">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderListItem(p) {
+            const iconClass = p.icon || 'fa-solid fa-code';
+
+            const adminControls = isAdminLoggedIn ? `
+                <div class="flex items-center space-x-1">
+                    <button onclick="window.moveSequence('${p.id}', -1)" class="w-7 h-7 rounded bg-slate-100 hover:bg-slate-200 text-indigo-600 text-xs transition" title="Up">▲</button>
+                    <button onclick="window.moveSequence('${p.id}', 1)" class="w-7 h-7 rounded bg-slate-100 hover:bg-slate-200 text-indigo-600 text-xs transition" title="Down">▼</button>
+                </div>
+            ` : '';
+
+            return `
+                <div class="pro-card rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 font-mono">
+                    <div class="flex items-center gap-3.5 flex-grow">
+                        <span class="w-8 h-8 rounded-lg bg-slate-900 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                            #${p.sequence || 0}
+                        </span>
+
+                        <div class="w-9 h-9 rounded-lg bg-slate-100 text-indigo-600 flex items-center justify-center hidden sm:flex flex-shrink-0 border border-slate-200">
+                            <i class="${iconClass}"></i>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-bold text-slate-900 hover:text-indigo-600 transition font-sans">${p.title}</h3>
+                                ${getStatusBadge(p.status)}
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">${p.category}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 line-clamp-1 max-w-xl font-sans">${p.description}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between w-full md:w-auto gap-3 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
+                        ${adminControls}
+
+                        <div class="flex items-center space-x-2">
+                            <a href="${p.demoUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center gap-1 shadow-sm">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Launch
+                            </a>
+                            ${isAdminLoggedIn ? `
+                                <button onclick="window.editProject('${p.id}')" class="p-1.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs transition border border-amber-200" title="Edit">
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+                                <button onclick="window.confirmDeleteProject('${p.id}')" class="p-1.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs transition border border-rose-200" title="Delete">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Global Sequence Re-ordering Action
+        window.moveSequence = async function(id, direction) {
+            const index = projects.findIndex(p => p.id === id);
+            if (index === -1) return;
+
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= projects.length) return;
+
+            const currentProj = projects[index];
+            const targetProj = projects[targetIndex];
+
+            const tempSeq = currentProj.sequence;
+            currentProj.sequence = targetProj.sequence;
+            targetProj.sequence = tempSeq;
+
+            if (isFirebaseAvailable && db) {
+                try {
+                    await update(ref(db, `projects/${currentProj.id}`), { sequence: currentProj.sequence });
+                    await update(ref(db, `projects/${targetProj.id}`), { sequence: targetProj.sequence });
+                    showToast('Sequence re-ordered on Firebase!');
+                } catch (e) {
+                    persistLocalState();
+                    renderProjects();
+                }
+            } else {
+                persistLocalState();
+                sortProjects();
+                renderProjects();
+                showToast('Sequence updated locally!');
+            }
+        };
+
+        // Edit Action
+        window.editProject = function(id) {
+            const p = projects.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('modal-title').innerHTML = `<i class="fa-solid fa-pen text-amber-600"></i> <span>Edit Payload</span>`;
+            document.getElementById('form-project-id').value = p.id;
+            document.getElementById('form-title').value = p.title;
+            document.getElementById('form-sequence').value = p.sequence;
+            document.getElementById('form-description').value = p.description;
+            document.getElementById('form-demo-url').value = p.demoUrl;
+            document.getElementById('form-github-url').value = p.githubUrl || '';
+            document.getElementById('form-category').value = p.category;
+            document.getElementById('form-status').value = p.status || 'Live';
+            document.getElementById('form-tags').value = (p.tags || []).join(', ');
+            document.getElementById('form-icon').value = p.icon || '';
+
+            openProjectModal();
+        };
+
+        // Delete Confirmation Modal Trigger
+        window.confirmDeleteProject = function(id) {
+            const p = projects.find(item => item.id === id);
+            if (!p) return;
+
+            pendingDeleteId = id;
+            document.getElementById('delete-project-title').textContent = p.title;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        };
+
+        // Execution of Delete
+        async function executeDelete() {
+            if (!pendingDeleteId) return;
+            const id = pendingDeleteId;
+
+            if (isFirebaseAvailable && db) {
+                try {
+                    await remove(ref(db, `projects/${id}`));
+                    showToast('Payload deleted from Firebase!', 'rose');
+                } catch (e) {
+                    executeLocalDelete(id);
+                }
+            } else {
+                executeLocalDelete(id);
+            }
+
+            pendingDeleteId = null;
+            document.getElementById('delete-modal').classList.add('hidden');
+        }
+
+        function executeLocalDelete(id) {
+            projects = projects.filter(p => p.id !== id);
+            persistLocalState();
+            updateMetrics();
+            renderCategories();
+            renderProjects();
+            showToast('Payload removed locally!', 'rose');
+        }
+
+        // Copy Link
+        window.copyLink = function(url) {
+            const el = document.createElement('textarea');
+            el.value = url;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast('Link copied to clipboard!');
+        };
+
+        // Trigger Cmd Command
+        window.triggerCmd = function(cmd) {
+            document.getElementById('cmd-modal').classList.add('hidden');
+            if (cmd === 'add') {
+                if (!isAdminLoggedIn) setAdminState(true);
+                openAddProjectForm();
+            } else if (cmd === 'root') {
+                document.getElementById('admin-mode-btn').click();
+            } else if (cmd === 'export') {
+                exportJSON();
+            }
+        };
+
+        // Global Event Handlers Setup
+        function setupGlobalListeners() {
+            // Search Input Filter
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderProjects();
+            });
+
+            // View Switcher
+            const gridBtn = document.getElementById('view-grid-btn');
+            const listBtn = document.getElementById('view-list-btn');
+
+            gridBtn.addEventListener('click', () => {
+                viewMode = 'grid';
+                gridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition flex items-center gap-1.5 bg-white text-indigo-600 shadow-sm";
+                listBtn.className = "px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900";
+                renderProjects();
+            });
+
+            listBtn.addEventListener('click', () => {
+                viewMode = 'list';
+                listBtn.className = "px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition flex items-center gap-1.5 bg-white text-indigo-600 shadow-sm";
+                gridBtn.className = "px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900";
+                renderProjects();
+            });
+
+            // Reset Filters
+            document.getElementById('reset-filters-btn').addEventListener('click', () => {
+                searchQuery = '';
+                activeCategory = 'All';
+                document.getElementById('search-input').value = '';
+                renderCategories();
+                renderProjects();
+            });
+
+            // Delete Modal Confirm / Cancel
+            document.getElementById('confirm-delete-btn').addEventListener('click', executeDelete);
+            document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+                pendingDeleteId = null;
+                document.getElementById('delete-modal').classList.add('hidden');
+            });
+
+            // Admin Passcode Lock Toggle
+            document.getElementById('admin-mode-btn').addEventListener('click', () => {
+                if (isAdminLoggedIn) {
+                    setAdminState(false);
+                } else {
+                    document.getElementById('admin-password-input').value = '';
+                    document.getElementById('admin-error-msg').classList.add('hidden');
+                    document.getElementById('admin-modal').classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const passcode = document.getElementById('admin-password-input').value;
+                if (passcode === ADMIN_PASSCODE) {
+                    document.getElementById('admin-modal').classList.add('hidden');
+                    setAdminState(true);
+                    showToast('Root Access Unlocked');
+                } else {
+                    document.getElementById('admin-error-msg').classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('close-admin-modal-btn').addEventListener('click', () => {
+                document.getElementById('admin-modal').classList.add('hidden');
+            });
+
+            document.getElementById('admin-logout-btn').addEventListener('click', () => {
+                setAdminState(false);
+                showToast('Exited Root Mode');
+            });
+
+            // Add Project Triggers
+            document.getElementById('admin-add-project-btn').addEventListener('click', openAddProjectForm);
+            document.getElementById('mobile-add-fab').addEventListener('click', openAddProjectForm);
+
+            document.getElementById('close-project-modal-btn').addEventListener('click', closeProjectModal);
+            document.getElementById('cancel-project-modal-btn').addEventListener('click', closeProjectModal);
+
+            // Command Palette Controls
+            document.getElementById('cmd-palette-btn').addEventListener('click', () => {
+                document.getElementById('cmd-modal').classList.remove('hidden');
+                document.getElementById('cmd-input').focus();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('cmd-modal').classList.toggle('hidden');
+                    document.getElementById('cmd-input').focus();
+                }
+                if (e.key === 'Escape') {
+                    document.getElementById('cmd-modal').classList.add('hidden');
+                }
+            });
+
+            // Mobile Navigation Buttons
+            document.getElementById('mobile-cmd-btn').addEventListener('click', () => {
+                document.getElementById('cmd-modal').classList.remove('hidden');
+            });
+
+            document.getElementById('mobile-root-btn').addEventListener('click', () => {
+                document.getElementById('admin-mode-btn').click();
+            });
+
+            // Export / Import JSON
+            document.getElementById('export-json-btn').addEventListener('click', exportJSON);
+            document.getElementById('import-trigger-btn').addEventListener('click', () => {
+                document.getElementById('import-json-input').click();
+            });
+            document.getElementById('import-json-input').addEventListener('change', importJSON);
+
+            // Save / Edit Submit Form
+            document.getElementById('project-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const editId = document.getElementById('form-project-id').value;
+                const title = document.getElementById('form-title').value.trim();
+                const sequence = parseInt(document.getElementById('form-sequence').value) || projects.length + 1;
+                const description = document.getElementById('form-description').value.trim();
+                const demoUrl = document.getElementById('form-demo-url').value.trim();
+                const githubUrl = document.getElementById('form-github-url').value.trim();
+                const category = document.getElementById('form-category').value;
+                const status = document.getElementById('form-status').value;
+                const tagsRaw = document.getElementById('form-tags').value;
+                const icon = document.getElementById('form-icon').value.trim();
+
+                const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [category];
+
+                const payload = {
+                    title,
+                    sequence,
+                    description,
+                    demoUrl,
+                    githubUrl,
+                    category,
+                    status,
+                    tags,
+                    icon: icon || 'fa-solid fa-code'
+                };
+
+                if (isFirebaseAvailable && db) {
+                    try {
+                        if (editId) {
+                            await update(ref(db, `projects/${editId}`), payload);
+                            showToast('Payload updated in Firebase!');
+                        } else {
+                            const newRef = push(projectsRef);
+                            await set(newRef, payload);
+                            showToast('Payload added to Firebase!');
+                        }
+                    } catch (err) {
+                        saveProjectLocally(editId, payload);
+                    }
+                } else {
+                    saveProjectLocally(editId, payload);
+                }
+
+                closeProjectModal();
+            });
+        }
+
+        function saveProjectLocally(editId, payload) {
+            if (editId) {
+                const idx = projects.findIndex(p => p.id === editId);
+                if (idx !== -1) {
+                    projects[idx] = { ...projects[idx], ...payload };
+                }
+            } else {
+                const newId = 'local-' + Date.now();
+                projects.push({ id: newId, ...payload });
+            }
+            persistLocalState();
+            sortProjects();
+            updateMetrics();
+            renderCategories();
+            renderProjects();
+            showToast('Payload saved to local database!');
+        }
+
+        function openAddProjectForm() {
+            document.getElementById('modal-title').innerHTML = `<i class="fa-solid fa-plus text-indigo-600"></i> <span>Add New Payload</span>`;
+            document.getElementById('project-form').reset();
+            document.getElementById('form-project-id').value = '';
+            document.getElementById('form-sequence').value = projects.length + 1;
+            openProjectModal();
+        }
+
+        function setAdminState(enabled) {
+            isAdminLoggedIn = enabled;
+            const banner = document.getElementById('admin-banner');
+            const fab = document.getElementById('mobile-add-fab');
+            const adminText = document.getElementById('admin-mode-text');
+            const adminIcon = document.getElementById('admin-lock-icon');
+
+            if (enabled) {
+                banner.classList.remove('hidden');
+                fab.classList.remove('hidden');
+                adminText.textContent = 'ROOT ACTIVE';
+                adminIcon.className = 'fa-solid fa-shield-cat text-emerald-400';
+            } else {
+                banner.classList.add('hidden');
+                fab.classList.add('hidden');
+                adminText.textContent = 'ROOT LOGIN';
+                adminIcon.className = 'fa-solid fa-shield-halved text-indigo-400';
+            }
+
+            renderProjects();
+        }
+
+        function openProjectModal() {
+            document.getElementById('project-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function exportJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projects, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `mk_dev_core_backup_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('Exported backup payload!');
+        }
+
+        function importJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function(evt) {
+                try {
+                    const imported = JSON.parse(evt.target.result);
+                    if (Array.isArray(imported)) {
+                        if (isFirebaseAvailable && db) {
+                            for (const item of imported) {
+                                const newRef = push(projectsRef);
+                                const { id, ...itemData } = item;
+                                await set(newRef, itemData);
+                            }
+                        } else {
+                            projects = imported;
+                            persistLocalState();
+                            sortProjects();
+                            updateMetrics();
+                            renderCategories();
+                            renderProjects();
+                        }
+                        showToast('Imported projects payload!');
+                    }
+                } catch (err) {
+                    showToast('Invalid JSON file payload', 'rose');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showToast(msg, type = 'indigo') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const colorClass = type === 'rose' 
+                ? 'bg-rose-600 text-white' 
+                : 'bg-slate-900 text-white';
+
+            toast.className = `px-4 py-2.5 rounded-xl text-xs font-mono font-semibold shadow-xl flex items-center gap-2 pointer-events-auto transform transition-all duration-300 translate-y-4 opacity-0 ${colorClass}`;
+            toast.innerHTML = `<i class="fa-solid fa-terminal text-indigo-400"></i> <span>${msg}</span>`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
